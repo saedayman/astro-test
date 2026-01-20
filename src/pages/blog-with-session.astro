@@ -77,11 +77,11 @@ try {
     console.log('Fetched session data:', sessionResponse.data);
     sessionData = sessionResponse.data;
     // Set cookies on response
-    setAccessToken(sessionData.accessToken!, Astro.response);
-    setTestVariantId('style', String(sessionData.testConfig?.variantId), Astro.response);
-    setVisitorId(sessionData.visitDetails.visitorId, Astro.response);
-    setVisitId(sessionData.visitDetails.visitId, Astro.response);
-    setLocaleCookie(getLocale(Astro.request), Astro.response);
+    // setAccessToken(sessionData.accessToken!, Astro.response);
+    // setTestVariantId('style', String(sessionData.testConfig?.variantId), Astro.response);
+    // setVisitorId(sessionData.visitDetails.visitorId, Astro.response);
+    // setVisitId(sessionData.visitDetails.visitId, Astro.response);
+    // setLocaleCookie(getLocale(Astro.request), Astro.response);
   }
 } catch (error) {
   console.error('Failed to fetch session:', error);

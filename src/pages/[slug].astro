@@ -8,7 +8,7 @@ export async function getStaticPaths() {
 
   return posts.map(post => ({
     params: {
-      slug: post.id.toString()
+      slug: post?.id.toString()
     },
     props: {
       post
@@ -19,16 +19,16 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 ---
 
-<Layout title={post.title}>
+<Layout title={post?.title}>
   <section class="page-content">
     <div class="container">
       <Card>
         <a class="btn" href="/blog">Go Back</a>
-        <h2>{post.title}</h2>
+        <h2>{post?.title}</h2>
         <div>
-          Post ID: <strong>{post.id}</strong> | User ID: <strong>{post.userId}</strong>
+          Post ID: <strong>{post?.id}</strong> | User ID: <strong>{post?.userId}</strong>
         </div>
-        <p>{post.body}</p>
+        <p>{post?.body}</p>
       </Card>
     </div>
   </section>
