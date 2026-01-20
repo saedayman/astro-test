@@ -4,13 +4,84 @@ export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import Showcase from '../components/Showcase.astro';
 import Card from '../components/Card.astro';
+import {
+  getAccessToken,
+  setAccessToken,
+  setVisitorId,
+  setLocaleCookie,
+  setVisitId,
+  getTestVariantId,
+  setTestVariantId,
+  getLanderCookie,
+  getLocale,
+} from '../lib/cookies';
+import HTTP, { apiHandler } from '../lib/http.service';
+import type { Session } from './api/session';
 
-// Fetch session data from our API endpoint
-let sessionData = null;
+// Get session data directly server-side
+let sessionData: Session | null = null;
 try {
-  const sessionResponse = await fetch(`${Astro.url.origin}/api/session`);
-  if (sessionResponse.ok) {
-    sessionData = await sessionResponse.json();
+  const accessToken = getAccessToken(Astro.request);
+  const variantId = Astro.url.searchParams.get('variantId') || getTestVariantId('style', Astro.request);
+  const lander = getLanderCookie(Astro.request) || Astro.url.searchParams.get('lander');
+  const parsedVariantId = variantId ? parseInt(variantId, 10) : undefined;
+
+  const meta: { lander?: string } = {};
+  if (lander) {
+    meta['lander'] = lander;
+  }
+
+  const clientAddress = Astro.request.headers.get('x-forwarded-for')?.split(',')[0] || '8.8.8.8';
+  const userAgent = Astro.request.headers.get('user-agent') || null;
+  const ipAddress = 
+    import.meta.env.NODE_ENV === 'development'
+      ? import.meta.env.FALLBACK_IP_ADDRESS || '8.8.8.8'
+      : Astro.request.headers.get('cf-connecting-ip') ||
+        Astro.request.headers.get('x-forwarded-for') ||
+        clientAddress ||
+        '8.8.8.8';
+
+  const useV2Api = import.meta.env.USE_V2_SESSION_API === 'true';
+  const sessionApiUrl = useV2Api ? '/api/web/v2/sessions' : '/api/web/v1/sessions';
+
+  const { data: sessionResponse } = await apiHandler<{ success: boolean; data: Session }>(
+    () => HTTP.server({
+      method: 'post',
+      url: sessionApiUrl,
+      data: {
+        userAgent,
+        ipAddress,
+        cookies: Astro.request.headers.get('cookie'),
+        lang: 'en',
+        url: Astro.url.toString(),
+        referrer: Astro.request.headers.get('referer'),
+        variantId: !isNaN(parsedVariantId!) ? parsedVariantId : undefined,
+        meta,
+      },
+      headers: accessToken
+        ? {
+            'X-DOMAIN-NAME': 'waterremovalcosts.com',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+            'X-Language': getLocale(Astro.request),
+          }
+        : {
+            'X-DOMAIN-NAME': 'waterremovalcosts.com',
+            'Content-Type': 'application/json',
+            'X-Language': getLocale(Astro.request),
+          },
+    })
+  );
+
+  if (sessionResponse?.success) {
+    console.log('Fetched session data:', sessionResponse.data);
+    sessionData = sessionResponse.data;
+    // Set cookies on response
+    setAccessToken(sessionData.accessToken!, Astro.response);
+    setTestVariantId('style', String(sessionData.testConfig?.variantId), Astro.response);
+    setVisitorId(sessionData.visitDetails.visitorId, Astro.response);
+    setVisitId(sessionData.visitDetails.visitId, Astro.response);
+    setLocaleCookie(getLocale(Astro.request), Astro.response);
   }
 } catch (error) {
   console.error('Failed to fetch session:', error);

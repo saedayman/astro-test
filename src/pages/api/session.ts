@@ -13,6 +13,8 @@ import {
 import HTTP, { apiHandler } from '../../lib/http.service';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 
+export const prerender = false;
+
 interface SessionResponse {
   success: boolean;
   data: Session;
