@@ -17,7 +17,6 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@astrojs/node": "^3.1.1",
     "axios": "^1.13.2",
     "cookie": "^1.1.1"
   }
