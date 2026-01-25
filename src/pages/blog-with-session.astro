@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Showcase from '../components/Showcase.astro';
 import Card from '../components/Card.astro';
@@ -95,16 +96,16 @@ const posts = await response.json();
 <Layout title="Astro Blog">
   <Showcase heading="Astro Blog" text="A simple blog built with Astro" />
   
-  <!-- Heavy Images for Performance Testing -->
+  <!-- Optimized Images for Performance Testing -->
   <section class="image-gallery" style="padding: 2rem 0;">
     <div class="container">
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
-        <img src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=800&q=80" alt="Large Image 1" style="width: 100%; height: 300px; object-fit: cover;" />
-        <img src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=800&q=80" alt="Large Image 2" style="width: 100%; height: 300px; object-fit: cover;" />
-        <img src="https://images.unsplash.com/photo-1682687221038-404cb8830901?w=800&q=80" alt="Large Image 3" style="width: 100%; height: 300px; object-fit: cover;" />
-        <img src="https://images.unsplash.com/photo-1682687218147-9806132dc697?w=800&q=80" alt="Large Image 4" style="width: 100%; height: 300px; object-fit: cover;" />
-        <img src="https://images.unsplash.com/photo-1682687220199-d0124f48f95b?w=800&q=80" alt="Large Image 5" style="width: 100%; height: 300px; object-fit: cover;" />
-        <img src="https://images.unsplash.com/photo-1682687220566-5599dbbebf11?w=800&q=80" alt="Large Image 6" style="width: 100%; height: 300px; object-fit: cover;" />
+        <img src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=400&h=300&q=75&fm=webp&fit=crop" alt="Optimized Image 1" style="width: 100%; height: 300px; object-fit: cover;" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=400&h=300&q=75&fm=webp&fit=crop" alt="Optimized Image 2" style="width: 100%; height: 300px; object-fit: cover;" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1682687221038-404cb8830901?w=400&h=300&q=75&fm=webp&fit=crop" alt="Optimized Image 3" style="width: 100%; height: 300px; object-fit: cover;" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1682687218147-9806132dc697?w=400&h=300&q=75&fm=webp&fit=crop" alt="Optimized Image 4" style="width: 100%; height: 300px; object-fit: cover;" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1682687220199-d0124f48f95b?w=400&h=300&q=75&fm=webp&fit=crop" alt="Optimized Image 5" style="width: 100%; height: 300px; object-fit: cover;" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1682687220566-5599dbbebf11?w=400&h=300&q=75&fm=webp&fit=crop" alt="Optimized Image 6" style="width: 100%; height: 300px; object-fit: cover;" loading="lazy" />
       </div>
     </div>
   </section>
@@ -130,9 +131,11 @@ const posts = await response.json();
       {posts.map(post => (
         <Card>
           <img 
-            src={`https://picsum.photos/seed/${post.id}/600/400`} 
+            src={`https://picsum.photos/seed/${post.id}/400/250.webp`} 
             alt={post.title} 
             style="width: 100%; height: 250px; object-fit: cover; margin-bottom: 1rem; border-radius: 8px;" 
+            loading="lazy"
+            decoding="async"
           />
           <h3>{post.title}</h3>
           <div>
