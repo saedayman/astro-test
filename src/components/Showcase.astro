@@ -6,12 +6,26 @@ export interface Props {
   heading?: string;
   text?: string;
   showExtra?: boolean;
+  heroImage?: string;
 }
 
-const { heading = "Welcome To The Astro Crash Course!", text="Build super fast HTML-first websites using your favorite JavaScript frameworks", showExtra = false } = Astro.props as Props;
+const { heading = "Welcome To The Astro Crash Course!", text="Build super fast HTML-first websites using your favorite JavaScript frameworks", showExtra = false, heroImage } = Astro.props as Props;
 ---
 
 <section class="showcase">
+  {heroImage && (
+    <div class="hero-image-wrapper">
+      <img 
+        src={heroImage} 
+        alt={heading}
+        fetchpriority="high"
+        loading="eager"
+        decoding="sync"
+        class="hero-img"
+      />
+    </div>
+  )}
+  
   <div class="showcase-text">
     <h1>{heading}</h1>
     <p>
@@ -37,6 +51,21 @@ const { heading = "Welcome To The Astro Crash Course!", text="Build super fast H
   background-color: var(--color-secondary);
   background-image: linear-gradient(to bottom, var(--color-primary), rgb(15 23 42 / 0));
   padding: 30px;
+}
+
+.hero-image-wrapper {
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.hero-img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
 }
 
 .showcase-blog {
