@@ -5,16 +5,20 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro check && astro build",
+    "build:prod": "astro check && astro build --mode production",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/netlify": "^6.6.4",
     "@astrojs/react": "^1.0.0",
     "astro": "^5.16.11",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "typescript": "^5.7.3"
   },
   "dependencies": {
     "axios": "^1.13.2",

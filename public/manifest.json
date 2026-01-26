@@ -1,0 +1,16 @@
+{
+  "name": "Astro Crash Course",
+  "short_name": "Astro",
+  "description": "Learn modern web development with Astro",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
