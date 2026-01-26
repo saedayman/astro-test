@@ -1,5 +1,0 @@
-# Robots.txt for better SEO
-User-agent: *
-Allow: /
-
-Sitemap: https://yourdomain.com/sitemap-index.xml
